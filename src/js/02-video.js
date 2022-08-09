@@ -5,7 +5,7 @@ const iframe = document.querySelector('iframe');
 const player = new Player(iframe);
 
 player.on(
-  'timeupdate',
+  'timeupdate', // скопіював з тех документації
   throttle(({ seconds }) => {
     localStorage.setItem('videoplayer-current-time', `${seconds}`);
   }, 1000)
@@ -14,7 +14,7 @@ player.on(
 const currentTime = localStorage.getItem('videoplayer-current-time');
 
 player
-  .setCurrentTime(currentTime)
+  .setCurrentTime(currentTime) //скопіював з тех документації
   .then(function () {})
   .catch(function (error) {
     switch (error.name) {
