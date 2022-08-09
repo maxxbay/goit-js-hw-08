@@ -13,9 +13,9 @@ const imgCollection = document.querySelector('.gallery');
 const imgMarkup = galleryItems
   .map(
     item =>
-      `<li><a class="gallery__item" href="${item.original}">
+      `<div><a class="gallery__item" href="${item.original}">
   <img class="gallery__image" src="${item.preview}" alt="${item.description}" />
-</a></li>`
+</a></div>`
   )
   .join('');
 
