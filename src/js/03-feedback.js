@@ -2,37 +2,38 @@ import { throttle } from 'lodash';
 
 const form = document.querySelector('form');
 const email = form.querySelector('input');
-const message = form.querySelector('textarea');
+const name = form.querySelector('textarea');
+
+const LOCALSTORAGE_KEY = 'feedback-form-state';
 
 form.addEventListener(
   'input',
-  throttle(event => {
-    const formInput = {
-      email: form.elements.email.value,
-      message: form.elements.message.value,
-    };
-    localStorage.setItem('feedback-form-state', JSON.stringify(formInput));
+  throttle(() => {
+    const fieldsValue = { email: email.value, name: name.value };
+    // console.log(fieldsValue);
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(fieldsValue));
   }, 500)
 );
 
 form.addEventListener('submit', event => {
   event.preventDefault();
-  const {
-    elements: { email, message },
-  } = event.currentTarget;
-  console.log({ email: email.value, message: message.value });
-
-  event.currentTarget.reset();
-  localStorage.clear();
+  console.log({ email: email.value, name: name.value });
+  form.reset();
+  localStorage.removeItem(LOCALSTORAGE_KEY);
 });
 
-const storage = localStorage.getItem('feedback-form-state');
-const parseStorage = JSON.parse(storage);
-
-const fillForm = () => {
-  if (parseStorage !== null) {
-    input.value = parseStorage.email;
-    textArea.value = parseStorage.message;
+// код з конспекта
+const load = key => {
+  try {
+    const serializedState = localStorage.getItem(key);
+    return serializedState === null ? undefined : JSON.parse(serializedState);
+  } catch (error) {
+    console.error('Get state error: ', error.message);
   }
 };
-fillForm();
+
+const storageFields = load(LOCALSTORAGE_KEY);
+if (storageFields) {
+  email.value = storageFields.email;
+  name.value = storageFields.name;
+}
